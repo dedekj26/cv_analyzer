@@ -63,33 +63,7 @@ Provide every job seeker with instant, professional-grade resume feedback powere
 
 ## 5. High-Level Architecture
 
-```mermaid
-graph TB
-    subgraph Client["Frontend - Web Browser"]
-        UI["Web UI<br/>HTML/CSS/JS"]
-    end
-
-    subgraph Server["Backend Server"]
-        API["REST API"]
-        Parser["Document Parser<br/>PDF/DOCX to Text"]
-        Prompt["Prompt Engine<br/>Builds analysis prompt"]
-    end
-
-    subgraph External["External Services"]
-        OpenAI["OpenAI API<br/>GPT Model"]
-    end
-
-    UI -->|"1. Upload CV file"| API
-    API -->|"2. Extract text"| Parser
-    Parser -->|"3. Raw text"| Prompt
-    Prompt -->|"4. Structured prompt"| OpenAI
-    OpenAI -->|"5. Analysis JSON"| API
-    API -->|"6. Structured results"| UI
-
-    style Client fill:#e8f4fd,stroke:#2196F3,color:#000
-    style Server fill:#fff3e0,stroke:#FF9800,color:#000
-    style External fill:#e8f5e9,stroke:#4CAF50,color:#000
-```
+![High-Level Architecture Diagram](docs/images/architecture_diagram.png)
 
 ### Architecture Notes
 
@@ -105,32 +79,7 @@ graph TB
 
 ## 6. User Flow
 
-```mermaid
-flowchart TD
-    A["Landing Page"] -->|"Click Analyze My CV"| B["Upload Page"]
-    B -->|"Select or drag and drop file"| C{"File Valid?"}
-    C -->|"No: wrong format or too large"| D["Show Error Message"]
-    D -->|"Try again"| B
-    C -->|"Yes"| E["Processing Screen"]
-    E -->|"AI processes document"| F{"Analysis Successful?"}
-    F -->|"No: API error or unreadable"| G["Show Error Message"]
-    G -->|"Try again"| B
-    F -->|"Yes"| H["Results Page"]
-
-    H --> I["Overall Score 0-100"]
-    H --> J["Strengths List"]
-    H --> K["Weaknesses List"]
-    H --> L["Recommendations List"]
-
-    H -->|"Click Upload Another CV"| B
-    H -->|"Click Download Report"| M["Download PDF Report"]
-
-    style A fill:#e3f2fd,stroke:#1565C0,color:#000
-    style H fill:#e8f5e9,stroke:#2E7D32,color:#000
-    style D fill:#fff3e0,stroke:#E65100,color:#000
-    style G fill:#fff3e0,stroke:#E65100,color:#000
-    style E fill:#f3e5f5,stroke:#7B1FA2,color:#000
-```
+![User Flow Diagram](docs/images/user_flow_diagram.png)
 
 ---
 
