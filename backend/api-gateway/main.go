@@ -10,14 +10,15 @@ import (
 	"log"
 	"os"
 
-	"cv_analyzer_api/handlers"
+	"cv_analyzer_api/database"
 	_ "cv_analyzer_api/docs"
+	"cv_analyzer_api/handlers"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/swagger"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/swagger"
 	"github.com/joho/godotenv"
 )
 
@@ -26,6 +27,10 @@ func main() {
 	if err != nil {
 		log.Println("No .env file found, relying on environment variables")
 	}
+
+	// Database: connect + auto-migrate schema
+	database.Connect()
+	database.Migrate()
 
 	app := fiber.New(fiber.Config{
 		BodyLimit: 5 * 1024 * 1024, // 5MB limit

@@ -1,4 +1,5 @@
-export type AnalysisLabel = "Perlu Perbaikan" | "Bagus" | "Luar Biasa";
+// Labels must match values returned by the Python AI service / Gemini prompt
+export type AnalysisLabel = "Kurang" | "Cukup" | "Bagus" | "Sangat Bagus";
 
 export interface AnalysisResult {
   score: number;
@@ -6,7 +7,9 @@ export interface AnalysisResult {
   strengths: string[];
   weaknesses: string[];
   recommendations: string[];
+  /** Enriched client-side — not stored by server (privacy NFR-6) */
   fileName: string;
+  /** ISO-8601 timestamp enriched client-side */
   analyzedAt: string;
 }
 

@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, CheckCircle2, Download, FileText, Lightbulb, RefreshCw, TriangleAlert } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Download, FileText, Lightbulb, Loader2, RefreshCw, TriangleAlert } from "lucide-react";
+import { useState } from "react";
 import type { AnalysisResult } from "@/lib/types";
-import { generatePdfReport } from "@/lib/pdf-report";
+import { downloadReport } from "@/lib/api-client";
 import ScoreGauge from "./ScoreGauge";
 import InsightSection from "./InsightSection";
 
@@ -11,6 +12,19 @@ interface ResultsViewProps {
 }
 
 const ResultsView = ({ result, onUploadAnother }: ResultsViewProps) => {
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      await downloadReport(result);
+    } catch (e) {
+      console.error("PDF download failed:", e);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <main className="relative z-10 mx-auto w-full max-w-[1280px] px-6 py-10 md:px-10 md:py-14">
       {/* Top meta bar */}
@@ -32,11 +46,16 @@ const ResultsView = ({ result, onUploadAnother }: ResultsViewProps) => {
         </div>
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:w-auto">
           <button
-            onClick={() => generatePdfReport(result)}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-background transition-all hover:scale-[1.02] active:scale-[0.98]"
+            onClick={handleDownload}
+            disabled={downloading}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-background transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
           >
-            <Download className="size-4" />
-            Unduh Laporan PDF
+            {downloading ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Download className="size-4" />
+            )}
+            {downloading ? "Membuat PDF..." : "Unduh Laporan PDF"}
           </button>
           <button
             onClick={onUploadAnother}

@@ -8,11 +8,17 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"strings"
 	"time"
+
+	"cv_analyzer_api/database"
+	"cv_analyzer_api/models"
+	"cv_analyzer_api/repository"
 
 	"github.com/gofiber/fiber/v2"
 )
 
+// AnalyzeResponse format expected by frontend
 type AnalyzeResponse struct {
 	Status string      `json:"status"`
 	Data   interface{} `json:"data"`
@@ -45,14 +51,24 @@ func AnalyzeCV(c *fiber.Ctx) error {
 			"error": "File exceeds 5MB limit",
 		})
 	}
-	
+
+	// Determine file type
+	fileType := "UNKNOWN"
+	fname := strings.ToLower(fileHeader.Filename)
+	if strings.HasSuffix(fname, ".pdf") {
+		fileType = "PDF"
+	} else if strings.HasSuffix(fname, ".docx") {
+		fileType = "DOCX"
+	}
+
 	pythonServiceURL := os.Getenv("PYTHON_SERVICE_URL")
 	if pythonServiceURL == "" {
-		pythonServiceURL = "http://localhost:8000"
+		pythonServiceURL = "http://localhost:8001"
 	}
 
 	file, err := fileHeader.Open()
 	if err != nil {
+		logAnalysis(fileHeader.Size, fileType, 0, nil, "FAILED_PARSING", "Could not open file")
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not open uploaded file",
 		})
@@ -86,6 +102,8 @@ func AnalyzeCV(c *fiber.Ctx) error {
 	client := &http.Client{Timeout: 60 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
+		processingTime := int(time.Since(startTime).Milliseconds())
+		logAnalysis(fileHeader.Size, fileType, processingTime, nil, "TIMEOUT", err.Error())
 		return c.Status(fiber.StatusGatewayTimeout).JSON(fiber.Map{
 			"error": "AI service timeout or unavailable",
 		})
@@ -99,18 +117,55 @@ func AnalyzeCV(c *fiber.Ctx) error {
 		})
 	}
 
-	var aiResponse AnalyzeResponse
+	var aiResponse map[string]interface{}
 	if err := json.Unmarshal(respBody, &aiResponse); err != nil {
+		processingTime := int(time.Since(startTime).Milliseconds())
+		logAnalysis(fileHeader.Size, fileType, processingTime, nil, "FAILED_AI", "Invalid AI response")
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Invalid response format from AI service",
 		})
 	}
 
-	processingTime := time.Since(startTime).Milliseconds()
+	processingTime := int(time.Since(startTime).Milliseconds())
+
+	// Extract score from data map for logging
+	var score *int
+	if s, ok := aiResponse["score"].(float64); ok {
+		sv := int(s)
+		score = &sv
+	}
+
+	// Log telemetry asynchronously — does not block the response
+	go logAnalysis(fileHeader.Size, fileType, processingTime, score, "SUCCESS", "")
 
 	return c.JSON(fiber.Map{
-		"status":             aiResponse.Status,
-		"data":               aiResponse.Data,
+		"status":             "success",
+		"data":               aiResponse,
 		"processing_time_ms": processingTime,
 	})
+}
+
+// logAnalysis writes a telemetry row to AnalysisLogs. Errors are only printed to stdout.
+func logAnalysis(fileSize int64, fileType string, processingTimeMs int, score *int, status string, errMsg string) {
+	if database.DB == nil {
+		return
+	}
+
+	var errMsgPtr *string
+	if errMsg != "" {
+		errMsgPtr = &errMsg
+	}
+
+	entry := &models.AnalysisLog{
+		FileSizeKB:       int(fileSize / 1024),
+		FileType:         fileType,
+		ProcessingTimeMs: processingTimeMs,
+		OverallScore:     score,
+		Status:           status,
+		ErrorMessage:     errMsgPtr,
+	}
+
+	if _, err := repository.CreateAnalysisLog(entry); err != nil {
+		fmt.Printf("Warning: failed to write analysis log: %v\n", err)
+	}
 }
