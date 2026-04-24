@@ -349,6 +349,9 @@ curl -sf http://localhost:8001/health || echo "ALERT: AI Service down"
 | 5 | Integrasi Backend | `docs/03_BE_INTEGRATION.md` | Golang + Python + SQL Server |
 | 6 | Integrasi Frontend | `docs/04_FE_INTEGRATION.md` | React + API integration |
 | 7 | Dokumentasi Teknis | `docs/05_TECH_DOCUMENTATION.md` | Dokumen ini |
+| 8 | QA Test Plan | `docs/06_QA_TEST_PLAN.md` | 61 test case, traceability matrix |
+| 9 | Dokumen Keamanan | `docs/07_SECURITY_DOCUMENT.md` | Threat model, kontrol keamanan, checklist |
+| 10 | UI/UX Document | `docs/08_UI_UX_DOCUMENT.md` | Design system, wireframes, aksesibilitas |
 
 ---
 
