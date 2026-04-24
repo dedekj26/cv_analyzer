@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* OptimaCV — Technical Glass Scanner palette */
+    --background: 220 30% 3%;          /* #05070A void */
+    --foreground: 210 16% 82%;         /* zinc-300 */
+
+    --card: 218 30% 6%;                /* #0A0E17 surface */
+    --card-foreground: 210 16% 90%;
+
+    --popover: 220 30% 4%;
+    --popover-foreground: 210 16% 90%;
+
+    --primary: 187 100% 50%;           /* cyan #00E5FF */
+    --primary-foreground: 220 30% 3%;
+
+    --secondary: 218 25% 10%;
+    --secondary-foreground: 210 16% 90%;
+
+    --muted: 218 20% 12%;
+    --muted-foreground: 218 10% 55%;   /* zinc-500 */
+
+    --accent: 187 100% 50%;
+    --accent-foreground: 220 30% 3%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 76% 50%;
+    --warning: 38 95% 55%;
+
+    --border: 210 20% 100% / 0.08;
+    --input: 210 20% 100% / 0.08;
+    --ring: 187 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom design tokens */
+    --surface: 0 0% 100% / 0.02;
+    --surface-hover: 0 0% 100% / 0.04;
+    --surface-raised: 218 25% 8%;
+    --cyan: 187 100% 50%;
+    --cyan-glow: 187 100% 50% / 0.5;
+    --gradient-radial: radial-gradient(circle at center, hsl(187 100% 50% / 0.15) 0%, transparent 60%);
+    --gradient-scan: linear-gradient(to bottom, transparent, hsl(187 100% 50% / 0.1));
+    --shadow-glow: 0 0 30px hsl(187 100% 50% / 0.4);
+    --shadow-glow-soft: 0 0 15px hsl(187 100% 50% / 0.2);
+    --shadow-card: 0 20px 50px hsl(220 30% 0% / 0.5);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-white/[0.08];
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .ambient-glow {
+    position: absolute;
+    background: var(--gradient-radial);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  .scan-line {
+    background: hsl(var(--cyan));
+    box-shadow: 0 0 15px 3px hsl(var(--cyan-glow));
+  }
+
+  .glass {
+    background: hsl(var(--surface));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(0 0% 100% / 0.08);
+  }
+
+  .glass-raised {
+    background: hsl(var(--surface-raised));
+    border: 1px solid hsl(0 0% 100% / 0.05);
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--cyan-glow));
+  }
+  .font-mono-tech {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+}
