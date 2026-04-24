@@ -1,0 +1,119 @@
+basePath: /
+definitions:
+  handlers.AnalyzeResponse:
+    properties:
+      data: {}
+      status:
+        type: string
+    type: object
+  handlers.ReportData:
+    properties:
+      label:
+        type: string
+      recommendations:
+        items:
+          type: string
+        type: array
+      score:
+        type: integer
+      strengths:
+        items:
+          type: string
+        type: array
+      weaknesses:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: API Gateway for CV Analyzer
+  title: CV Analyzer API
+  version: "1.0"
+paths:
+  /api/v1/analyze:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a PDF or DOCX file to analyze using AI
+      parameters:
+      - description: CV File (PDF/DOCX) max 5MB
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.AnalyzeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "413":
+          description: Request Entity Too Large
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Analyze CV document
+      tags:
+      - analyze
+  /api/v1/health:
+    get:
+      consumes:
+      - application/json
+      description: get the status of server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Check API health
+      tags:
+      - health
+  /api/v1/report/generate:
+    post:
+      consumes:
+      - application/json
+      description: Generate a PDF report from analysis JSON data
+      parameters:
+      - description: Report Data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ReportData'
+      produces:
+      - application/pdf
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Generate CV analysis report
+      tags:
+      - report
+swagger: "2.0"

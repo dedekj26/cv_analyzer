@@ -7,7 +7,7 @@ import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import AnalyzingView from "@/components/AnalyzingView";
 import ResultsView from "@/components/ResultsView";
-import { analyzeCV } from "@/lib/mock-analyzer";
+import { analyzeCV } from "@/lib/api-client";
 import type { AppState } from "@/lib/types";
 
 const Index = () => {
