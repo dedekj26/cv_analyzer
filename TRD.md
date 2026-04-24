@@ -1,170 +1,266 @@
-# CV Analyzer - Technical Architecture & Infrastructure Document
-
-## 1. Executive Summary
-This document outlines the technical architecture, system design, and infrastructure requirements for the **CV Analyzer** application (v1.0), based on the provided Product Requirements Document (PRD). The system is designed to provide real-time, AI-powered CV analysis using Google Gemini, emphasizing simplicity, high performance, and scalability.
+# Dokumen Arsitektur Teknis & Infrastruktur
+# CV Analyzer v1.0
 
 ---
 
-## 2. Technology Stack
-Based on the PRD, the application utilizes a microservices-oriented architecture with the following stack:
+## 1. Ringkasan Eksekutif
 
-| Component | Technology | Purpose |
+Dokumen ini menjabarkan rancangan arsitektur sistem, desain teknis, serta kebutuhan infrastruktur untuk aplikasi **CV Analyzer** versi 1.0 yang mengacu pada Dokumen Kebutuhan Produk (PRD). Sistem ini dirancang untuk memberikan analisis CV secara real-time menggunakan kecerdasan buatan Google Gemini, dengan mengedepankan kesederhanaan, performa tinggi, dan skalabilitas.
+
+---
+
+## 2. Tumpukan Teknologi (Technology Stack)
+
+| Komponen | Teknologi | Fungsi |
 | :--- | :--- | :--- |
-| **Frontend** | React + Vite + Tailwind CSS | Fast, responsive, and minimalist user interface. |
-| **Core Backend (API)**| Golang | High-performance API server to handle uploads and orchestration. |
-| **Database** | SQL Server | Storing application metadata, usage analytics, and error logs (no PII or CV files stored in v1). |
-| **AI Service** | Python (FastAPI) | Document parsing (PyPDF2/python-docx) and AI prompt engineering. |
-| **Workflow / Orchestration** | n8n | Automated pipeline management (optional for v1, but supported). |
-| **External LLM** | Google Gemini Flash API | Natural Language Processing for CV evaluation. |
+| **Antarmuka Pengguna** | React + Vite + Tailwind CSS | Membangun tampilan web yang cepat, responsif, dan minimalis |
+| **Server Utama (API)** | Golang (Gin/Fiber) | Menangani unggahan file, orkestrasi proses, dan komunikasi antar layanan |
+| **Basis Data** | SQL Server | Menyimpan metadata analisis, catatan penggunaan, dan log kesalahan |
+| **Layanan AI** | Python (FastAPI) | Mengekstrak teks dari dokumen dan menyusun prompt untuk model AI |
+| **Otomasi Alur Kerja** | n8n | Manajemen pipeline otomatis (opsional di v1) |
+| **Model Bahasa** | Google Gemini Flash API | Melakukan pemrosesan bahasa alami untuk evaluasi CV |
 
 ---
 
-## 3. System Architecture Design
+## 3. Desain Arsitektur Sistem
 
-The architecture is designed to handle document uploads securely, process them entirely in memory, and interact with external AI services asynchronously.
+Arsitektur ini dirancang agar dokumen yang diunggah diproses sepenuhnya di dalam memori (tanpa menyimpan ke disk), sehingga menjaga privasi pengguna sekaligus memastikan kecepatan pemrosesan.
 
-```mermaid
-flowchart TD
-    Client["Frontend Client\n(React + Vite)"]
-    
-    subgraph Core System
-        GoAPI["Backend API\n(Golang)"]
-        SQLDB[("SQL Server\n(Logs & Analytics)")]
-    end
-    
-    subgraph AI Processing
-        PyService["AI Parser Service\n(Python FastAPI)"]
-    end
-    
-    subgraph External
-        Gemini["Google Gemini\nFlash API"]
-    end
+![Arsitektur Sistem](docs/images/system_architecture.png)
 
-    Client -- "1. Upload PDF/DOCX (Max 5MB)" --> GoAPI
-    GoAPI -- "2. Forward file buffer" --> PyService
-    PyService -- "3. Extract Text" --> PyService
-    PyService -- "4. NLP Prompt" --> Gemini
-    Gemini -- "5. Structured JSON Output" --> PyService
-    PyService -- "6. Parsed Results" --> GoAPI
-    GoAPI -- "7. Log Transaction" --> SQLDB
-    GoAPI -- "8. Return JSON Response" --> Client
-```
+### Alur Data
+
+1. **Pengguna** mengunggah file PDF/DOCX (maks. 5MB) ke **Server Golang**
+2. **Server Golang** meneruskan buffer file ke **Layanan AI Python**
+3. **Layanan Python** mengekstrak teks dari dokumen (di dalam memori, tanpa tulis ke disk)
+4. **Layanan Python** mengirimkan prompt terstruktur ke **Google Gemini API**
+5. **Gemini** mengembalikan hasil analisis dalam format JSON → **Layanan Python**
+6. **Layanan Python** mengembalikan hasil yang sudah diproses → **Server Golang**
+7. **Server Golang** mencatat transaksi ke **SQL Server**
+8. **Server Golang** mengirimkan respons JSON ke **Pengguna**
 
 ---
 
-## 4. Component Specifications
+## 4. Spesifikasi Komponen
 
-### 4.1. Frontend (React + Vite)
-- **State Management**: React Context or Zustand (minimal state needed).
-- **Styling**: Tailwind CSS for rapid, responsive UI development.
-- **Routing**: React Router (Main Page, Upload view, Results view).
-- **File Upload**: Native HTML5 Drag-and-Drop with pre-upload validation (File type, Size < 5MB).
+### 4.1. Antarmuka Pengguna (React + Vite)
 
-### 4.2. Core Backend (Golang)
-- **Framework**: Standard library `net/http` or lightweight router like `Gin` / `Echo` or `Fiber` for high throughput.
-- **Responsibilities**:
-  - Receive and validate multipart/form-data requests.
-  - Rate limiting and basic DDoS protection.
-  - Forward files securely to the AI Python Service via internal gRPC or HTTP.
-  - Insert anonymized transaction logs into SQL Server.
-  - PDF Report Generation (using libraries like `gofpdf` or `unidoc`).
+| Aspek | Detail |
+|---|---|
+| Manajemen State | React Context atau Zustand (kebutuhan state minimal) |
+| Styling | Tailwind CSS untuk pengembangan UI responsif yang cepat |
+| Navigasi | React Router (Halaman Utama, Halaman Unggah, Halaman Hasil) |
+| Unggah File | Drag-and-drop HTML5 bawaan dengan validasi sebelum unggah |
+| Ekspor PDF | Pembuatan PDF di sisi klien menggunakan `jspdf` |
 
-### 4.3. AI Parsing Service (Python)
-- **Framework**: FastAPI (async Python).
-- **Libraries**: `PyPDF2`, `python-docx` for text extraction. `google-generativeai` SDK.
-- **Responsibilities**:
-  - Extract text safely without saving to disk.
-  - Sanitize and format the prompt.
-  - Handle Gemini API rate limits and retries (Exponential backoff).
-  - Parse Gemini's JSON response and ensure schema validity.
+### 4.2. Server Utama (Golang)
+
+| Aspek | Detail |
+|---|---|
+| Framework | `Gin` atau `Fiber` untuk throughput tinggi |
+| Penanganan File | Multipart/form-data dengan validasi ukuran & tipe MIME |
+| Keamanan | Pembatasan laju akses (rate limiting), CORS, perlindungan DDoS |
+| Komunikasi Internal | HTTP atau gRPC ke Layanan AI Python |
+| Pencatatan Log | Log transaksi anonim ke SQL Server |
+| Pembuatan Laporan | `gofpdf` atau `unidoc` untuk pembuatan PDF di sisi server |
+
+### 4.3. Layanan AI (Python)
+
+| Aspek | Detail |
+|---|---|
+| Framework | FastAPI (asinkron) |
+| Pustaka | `PyPDF2`, `python-docx`, `google-generativeai` SDK |
+| Ekstraksi Teks | Sepenuhnya di memori — tidak ada penulisan ke disk |
+| Penanganan Error | Exponential backoff untuk rate limit Gemini API |
+| Validasi | Validasi skema pada respons JSON dari Gemini |
 
 ---
 
-## 5. Database Schema (SQL Server)
-*Note: In accordance with NFR-6 (Data Privacy), uploaded files and extracted text are NEVER saved to the database. The database is strictly for telemetry, analytics, and error tracking to measure "Success Metrics" from the PRD.*
+## 5. Skema Basis Data (SQL Server)
+
+> **Catatan Privasi (NFR-6):** File yang diunggah dan teks yang diekstrak **tidak pernah** disimpan ke basis data. Basis data hanya digunakan untuk telemetri, analitik, dan pelacakan kesalahan guna mengukur metrik keberhasilan yang tertera di PRD.
+
+![Skema Basis Data](docs/images/database_schema.png)
 
 ```sql
--- Table: AnalysisLogs
+-- Tabel: AnalysisLogs (Catatan Analisis)
 CREATE TABLE AnalysisLogs (
     LogID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     Timestamp DATETIME DEFAULT GETUTCDATE(),
     FileSizeKB INT NOT NULL,
-    FileType VARCHAR(10) NOT NULL, -- 'PDF' or 'DOCX'
+    FileType VARCHAR(10) NOT NULL, -- 'PDF' atau 'DOCX'
     ProcessingTimeMs INT NOT NULL,
     OverallScore INT,
     Status VARCHAR(20) NOT NULL, -- 'SUCCESS', 'FAILED_PARSING', 'FAILED_AI', 'TIMEOUT'
     ErrorMessage NVARCHAR(MAX) NULL
 );
+
+-- Tabel: ApiUsageLogs (Catatan Penggunaan API)
+CREATE TABLE ApiUsageLogs (
+    LogID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    AnalysisLogID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES AnalysisLogs(LogID),
+    Model VARCHAR(50) NOT NULL,
+    PromptTokens INT,
+    CompletionTokens INT,
+    TotalTokens INT,
+    CostUSD DECIMAL(10,6),
+    CreatedAt DATETIME DEFAULT GETUTCDATE()
+);
 ```
 
 ---
 
-## 6. API Interfaces
+## 6. Antarmuka API
 
-### 6.1. Analyze CV Endpoint
+### 6.1. Endpoint Analisis CV
+
 **`POST /api/v1/analyze`**
 - **Content-Type**: `multipart/form-data`
-- **Payload**: `file` (Binary PDF/DOCX)
-- **Response (200 OK)**:
+- **Payload**: `file` (file biner PDF/DOCX)
+- **Respons Sukses (200 OK)**:
 ```json
 {
   "status": "success",
   "data": {
     "score": 72,
     "label": "Bagus",
-    "strengths": ["..."],
-    "weaknesses": ["..."],
-    "recommendations": ["..."]
+    "strengths": ["Riwayat kerja kronologis yang jelas..."],
+    "weaknesses": ["Kurang memiliki pencapaian terukur..."],
+    "recommendations": ["Tambahkan angka spesifik ke deskripsi pencapaian..."]
   },
   "processing_time_ms": 4250
 }
 ```
+- **Respons Gagal**: `400` (file tidak valid), `413` (ukuran file melebihi batas), `500` (kesalahan server), `504` (waktu habis)
 
-### 6.2. Download Report Endpoint
+### 6.2. Endpoint Unduh Laporan
+
 **`POST /api/v1/report/generate`**
 - **Content-Type**: `application/json`
-- **Payload**: JSON matching the `data` object from the `/analyze` response.
-- **Response (200 OK)**: `application/pdf` binary stream.
+- **Payload**: Objek JSON yang sesuai dengan `data` dari respons `/analyze`
+- **Respons (200 OK)**: Stream biner `application/pdf`
+
+### 6.3. Pemeriksaan Kesehatan Sistem
+
+**`GET /api/v1/health`**
+- **Respons**: `{ "status": "ok", "version": "1.0.0", "uptime": "..." }`
 
 ---
 
-## 7. Infrastructure Request (Infra Request)
+## 7. Kebutuhan Infrastruktur
 
-To deploy the CV Analyzer v1.0, the following infrastructure components are requested to support the target of ~500+ analyses/month, keeping costs low while ensuring 99% uptime.
+![Arsitektur Infrastruktur](docs/images/infra_diagram.png)
 
-### 7.1. Compute Resources (Containerized via Docker)
-| Service | Resource Specs | Recommended Cloud Service (AWS/GCP/Azure) |
+Target: ~500+ analisis per bulan, biaya rendah, uptime 99%.
+
+### 7.1. Sumber Daya Komputasi (Kontainerisasi Docker)
+
+| Layanan | Spesifikasi | Rekomendasi Layanan Cloud |
 | :--- | :--- | :--- |
-| **Frontend** | Static Hosting | Vercel, Cloudflare Pages, or AWS S3 + CloudFront |
-| **Golang API** | 1 vCPU, 1 GB RAM | Google Cloud Run, AWS App Runner, or basic VPS |
-| **Python AI Svc** | 1 vCPU, 2 GB RAM | Google Cloud Run (to handle memory-intensive PDF parsing) |
+| **Frontend** | Hosting statis | Vercel / Cloudflare Pages / S3+CloudFront |
+| **Server Golang** | 1 vCPU, 1 GB RAM | Google Cloud Run / AWS App Runner / VPS |
+| **Layanan AI Python** | 1 vCPU, 2 GB RAM | Google Cloud Run (butuh memori lebih untuk parsing PDF) |
 
-### 7.2. Database
-- **SQL Server Instance**: A basic managed instance.
-- **Specs**: 1 vCPU, 1 GB RAM, 10 GB Storage (e.g., Azure SQL Database Basic Tier or AWS RDS SQL Server Express).
+### 7.2. Basis Data
 
-### 7.3. Network & Security
-- **Domain & SSL**: Custom domain with TLS 1.2+ termination.
-- **WAF**: Basic Web Application Firewall to block malicious file uploads and enforce rate limiting (e.g., Cloudflare free tier).
-- **Internal Network**: The Golang API and Python Service should communicate over a private VPC; only the Golang API is exposed to the internet.
+- **SQL Server**: Instans terkelola (managed instance) tingkat dasar
+- **Spesifikasi**: 1 vCPU, 1 GB RAM, 10 GB penyimpanan
+- **Pilihan**: Azure SQL Database Basic Tier / AWS RDS SQL Server Express
 
-### 7.4. External APIs & Secrets Management
-- **Google Gemini API Key**: Stored securely in a Secrets Manager (e.g., AWS Secrets Manager, GCP Secret Manager, or Doppler).
-- **Environment Variables**:
-  - `GEMINI_API_KEY`
-  - `DB_CONNECTION_STRING`
-  - `PYTHON_SERVICE_URL`
+### 7.3. Jaringan & Keamanan
 
-### 7.5. CI/CD Pipeline
-- **Repository**: GitHub or GitLab.
-- **Actions**:
-  1. Linting & Unit tests on PR.
-  2. Build Docker images on merge to `main`.
-  3. Deploy to Staging/Production automatically.
+| Aspek | Kebutuhan |
+|---|---|
+| Domain & SSL | Domain kustom dengan terminasi TLS 1.2+ |
+| WAF | Firewall aplikasi web dasar (Cloudflare free tier atau setara) |
+| Jaringan Internal | Komunikasi Golang ↔ Python melalui VPC privat |
+| Akses Publik | Hanya Server Golang yang terbuka ke internet |
+
+### 7.4. Manajemen Rahasia (Secrets)
+
+| Variabel | Penyimpanan |
+|---|---|
+| `GEMINI_API_KEY` | AWS Secrets Manager / GCP Secret Manager |
+| `DB_CONNECTION_STRING` | Variabel lingkungan (terenkripsi) |
+| `PYTHON_SERVICE_URL` | Service discovery internal |
+
+### 7.5. Pipeline CI/CD
+
+1. **Pull Request**: Linting & pengujian unit otomatis
+2. **Merge ke `main`**: Build image Docker
+3. **Deploy otomatis**: Staging → Produksi
 
 ---
 
-## 8. Security & Privacy Compliance
-1. **Zero-Retention Policy**: Files are read into a memory buffer (`bytes.Buffer`), sent to the AI service, and garbage-collected immediately. No disk writes.
-2. **File Validation**: Strict MIME-type checking and Magic Number verification in Golang before processing to prevent malicious file execution.
-3. **API Key Protection**: The Gemini API key is never exposed to the frontend. All AI interactions occur via the backend Python service.
+## 8. Keamanan & Privasi Data
+
+| # | Langkah Pengamanan | Implementasi |
+|---|---|---|
+| 1 | Kebijakan Tanpa Penyimpanan | File dibaca ke `bytes.Buffer`, lalu dihapus otomatis oleh garbage collector setelah diproses |
+| 2 | Validasi File | Pengecekan tipe MIME dan Magic Number di Golang sebelum file diproses |
+| 3 | Perlindungan Kunci API | Kunci Gemini hanya tersimpan di sisi server; tidak pernah terekspos ke frontend |
+| 4 | Sanitasi Input | Teks disanitasi sebelum disusun menjadi prompt |
+| 5 | Pembatasan Laju Akses | Throttling per alamat IP untuk mencegah penyalahgunaan |
+
+---
+
+## 9. Pemantauan & Observabilitas
+
+| Alat | Fungsi |
+|---|---|
+| **Prometheus** | Pengumpulan metrik (latensi request, tingkat kesalahan) |
+| **Grafana** | Dashboard visualisasi & sistem peringatan |
+| **Structured Logging** | Log terstruktur JSON menggunakan `zerolog` (Go) / `loguru` (Python) |
+
+### Metrik Utama yang Dipantau
+
+- Latensi permintaan (p50, p95, p99)
+- Waktu respons & tingkat kesalahan Gemini API
+- Rasio keberhasilan/kegagalan unggah file
+- Distribusi skor analisis
+- Jumlah analisis harian dan mingguan
+
+---
+
+## 10. Timeline Proyek
+
+![Timeline Proyek](docs/images/timeline_diagram.png)
+
+| Fase | Pencapaian | Jadwal | Penanggung Jawab |
+|---|---|---|---|
+| Fase 1 | Backend API + Penguraian Dokumen | Minggu 1–2 | Tim Backend |
+| Fase 2 | Integrasi Gemini + Penyusunan Prompt | Minggu 2–3 | Tim AI/Backend |
+| Fase 3 | Antarmuka Frontend (Unggah + Hasil) | Minggu 3–4 | Tim Frontend |
+| Fase 4 | Fitur Unduh Laporan PDF | Minggu 4 | Full Stack |
+| Fase 5 | Pengujian, Perbaikan Bug, Pemolesan | Minggu 5 | QA + Seluruh Tim |
+| Peluncuran | Rilis Publik (v1.0) | Minggu 6 | Seluruh Tim |
+
+---
+
+## 11. Estimasi Biaya Bulanan
+
+| Item | Perkiraan Biaya |
+|---|---|
+| Hosting Frontend (Vercel/CF) | Gratis – $20 |
+| Server Golang (Cloud Run / VPS) | $5 – $25 |
+| Layanan AI Python (Cloud Run) | $5 – $25 |
+| SQL Server (Tier Dasar) | $5 – $15 |
+| Gemini API (~500 analisis) | $2 – $10 |
+| Domain + SSL | $1 – $5 |
+| **Total** | **~$18 – $100/bulan** |
+
+---
+
+## 12. Risiko & Mitigasi
+
+| Risiko | Dampak | Langkah Mitigasi |
+|---|---|---|
+| Gangguan layanan Gemini API | Analisis tidak tersedia | Logika percobaan ulang otomatis + pesan kesalahan yang ramah pengguna |
+| Unggahan file berbahaya | Potensi pelanggaran keamanan | Validasi magic number + pembatasan ukuran file + WAF |
+| Latensi tinggi (>30 detik) | Pengalaman pengguna buruk | Pemrosesan asinkron + penanganan timeout + caching |
+| Pembengkakan biaya API | Melebihi anggaran | Pemantauan penggunaan token + pembatasan laju per pengguna |
+| Pelanggaran privasi data | Risiko hukum | Kebijakan tanpa penyimpanan + tidak ada data pribadi di basis data |
+
+---
+
+*Akhir Dokumen*
