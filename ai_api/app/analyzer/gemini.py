@@ -32,10 +32,10 @@ def _clean_json_response(raw_text: str) -> str:
 
 def _validate_and_fix_label(score: int, label: str) -> str:
     expected_labels = {
-        (0, 39): "Perlu Perbaikan",
+        (0, 39): "Kurang",
         (40, 59): "Cukup",
         (60, 79): "Bagus",
-        (80, 100): "Luar Biasa",
+        (80, 100): "Sangat Bagus",
     }
 
     for (low, high), expected_label in expected_labels.items():

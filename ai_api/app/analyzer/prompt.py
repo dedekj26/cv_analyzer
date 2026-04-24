@@ -43,10 +43,10 @@ Evaluasi CV berdasarkan kriteria berikut:
 5. **Kelengkapan** (15%): Apakah ada ringkasan profesional, pendidikan, kontak, dll?
 
 ## ATURAN PENILAIAN SKOR
-- **0-39**: "Perlu Perbaikan" — CV memiliki banyak masalah fundamental
-- **40-59**: "Cukup" — CV memenuhi standar dasar tapi banyak yang bisa diperbaiki  
+- **0-39**: "Kurang" — CV memiliki banyak masalah fundamental
+- **40-59**: "Cukup" — CV memenuhi standar dasar tapi banyak yang bisa diperbaiki
 - **60-79**: "Bagus" — CV solid dengan beberapa area yang bisa ditingkatkan
-- **80-100**: "Luar Biasa" — CV sangat profesional dan kompetitif
+- **80-100**: "Sangat Bagus" — CV sangat profesional dan kompetitif
 
 ## ATURAN OUTPUT
 - Berikan **3 hingga 7 poin** untuk masing-masing kekuatan, kelemahan, dan rekomendasi
@@ -59,7 +59,7 @@ Kembalikan HANYA objek JSON berikut, tanpa teks tambahan, tanpa markdown code bl
 
 {{
   "score": <angka 0-100>,
-  "label": "<Perlu Perbaikan|Cukup|Bagus|Luar Biasa>",
+  "label": "<Kurang|Cukup|Bagus|Sangat Bagus>",
   "strengths": [
     "<kekuatan spesifik 1>",
     "<kekuatan spesifik 2>",
