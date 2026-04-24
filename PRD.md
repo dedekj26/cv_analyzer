@@ -68,15 +68,15 @@ Memberikan umpan balik resume tingkat profesional instan yang didukung oleh AI k
 
 ### Catatan Arsitektur
 
-| Komponen         | Teknologi / Alat                | Tujuan                                                     | Ref   |
-| ---------------- | ------------------------------- | ---------------------------------------------------------- | ----- |
-| Frontend         | React + Vite + Tailwind CSS     | Antarmuka pengguna untuk unggahan dan tampilan hasil       | [9]   |
-| Backend API      | Golang + SQL Server             | Menangani unggahan file, orkestrasi, dan respons           | [10]  |
-| Layanan AI       | Python (FastAPI)                | Pemrosesan AI, parsing dokumen, dan analisis NLP           | [11]  |
-| Parser Dokumen   | PyPDF2 / python-docx            | Mengekstrak teks biasa dari file PDF/DOCX                  | [12]  |
-| Mesin Prompt     | Modul kustom (Python)           | Menyusun prompt terstruktur untuk LLM                      | —     |
-| Automation       | n8n                             | Orkestrasi workflow dan otomatisasi pipeline               | [13]  |
-| Layanan Eksternal| Gemini Flash API Key (Google)   | Melakukan analisis NLP dan menghasilkan output terstruktur | [6]   |
+| Komponen          | Teknologi / Alat              | Tujuan                                                     | Ref  |
+| ----------------- | ----------------------------- | ---------------------------------------------------------- | ---- |
+| Frontend          | React + Vite + Tailwind CSS   | Antarmuka pengguna untuk unggahan dan tampilan hasil       | [9]  |
+| Backend API       | Golang + SQL Server           | Menangani unggahan file, orkestrasi, dan respons           | [10] |
+| Layanan AI        | Python (FastAPI)              | Pemrosesan AI, parsing dokumen, dan analisis NLP           | [11] |
+| Parser Dokumen    | PyPDF2 / python-docx          | Mengekstrak teks biasa dari file PDF/DOCX                  | [12] |
+| Mesin Prompt      | Modul kustom (Python)         | Menyusun prompt terstruktur untuk LLM                      | —    |
+| Automation        | n8n                           | Orkestrasi workflow dan otomatisasi pipeline               | [13] |
+| Layanan Eksternal | Gemini Flash API Key (Google) | Melakukan analisis NLP dan menghasilkan output terstruktur | [6]  |
 
 ---
 
@@ -402,24 +402,24 @@ HALAMAN HASIL (RESULTS PAGE)
 
 ### Skenario 1 — Pengguna Pertama Kali (First Time User)
 
-| Langkah | Aksi Pengguna                              | Respons Sistem                                                 |
-| ------- | ------------------------------------------ | -------------------------------------------------------------- |
-| 1       | Pengguna membuka halaman web CV Analyzer   | Menampilkan halaman utama dengan tombol "Analisis CV Saya"     |
-| 2       | Pengguna mengunggah file CV (PDF/DOCX)     | Sistem menerima file, mengekstrak teks, mengirim ke API Gemini |
-| 3       | Pengguna melihat hasil analisis            | Menampilkan skor, kekuatan, kelemahan, dan rekomendasi         |
-| 4       | Pengguna mengunduh laporan PDF (opsional)  | Sistem menghasilkan dan mengunduh file PDF                     |
+| Langkah | Aksi Pengguna                             | Respons Sistem                                                 |
+| ------- | ----------------------------------------- | -------------------------------------------------------------- |
+| 1       | Pengguna membuka halaman web CV Analyzer  | Menampilkan halaman utama dengan tombol "Analisis CV Saya"     |
+| 2       | Pengguna mengunggah file CV (PDF/DOCX)    | Sistem menerima file, mengekstrak teks, mengirim ke API Gemini |
+| 3       | Pengguna melihat hasil analisis           | Menampilkan skor, kekuatan, kelemahan, dan rekomendasi         |
+| 4       | Pengguna mengunduh laporan PDF (opsional) | Sistem menghasilkan dan mengunduh file PDF                     |
 
 > **Hasil:** Pengguna mendapatkan umpan balik objektif tentang kualitas CV-nya dalam hitungan detik, tanpa perlu mendaftar.
 
 ### Skenario 2 — Perbaikan CV Iteratif (Improve CV)
 
-| Langkah | Aksi Pengguna                                        | Respons Sistem                                                 |
-| ------- | ---------------------------------------------------- | -------------------------------------------------------------- |
-| 1       | Pengguna mengunggah CV pertama kali                  | Sistem menampilkan skor **60/100** — "Perlu Perbaikan"         |
-| 2       | Pengguna membaca kelemahan dan rekomendasi            | Sistem menunjukkan area spesifik yang perlu diperbaiki          |
-| 3       | Pengguna memperbaiki CV berdasarkan rekomendasi       | _(Di luar sistem — pengguna mengedit dokumen CV)_              |
-| 4       | Pengguna mengunggah CV yang sudah diperbaiki          | Sistem menampilkan skor baru **78/100** — "Bagus"              |
-| 5       | Pengguna membandingkan hasil dengan analisis sebelumnya | Pengguna melihat peningkatan skor dan area yang membaik       |
+| Langkah | Aksi Pengguna                                           | Respons Sistem                                          |
+| ------- | ------------------------------------------------------- | ------------------------------------------------------- |
+| 1       | Pengguna mengunggah CV pertama kali                     | Sistem menampilkan skor **60/100** — "Perlu Perbaikan"  |
+| 2       | Pengguna membaca kelemahan dan rekomendasi              | Sistem menunjukkan area spesifik yang perlu diperbaiki  |
+| 3       | Pengguna memperbaiki CV berdasarkan rekomendasi         | _(Di luar sistem — pengguna mengedit dokumen CV)_       |
+| 4       | Pengguna mengunggah CV yang sudah diperbaiki            | Sistem menampilkan skor baru **78/100** — "Bagus"       |
+| 5       | Pengguna membandingkan hasil dengan analisis sebelumnya | Pengguna melihat peningkatan skor dan area yang membaik |
 
 > **Hasil:** Pengguna menggunakan CV Analyzer sebagai alat iteratif untuk terus memperbaiki kualitas CV hingga mencapai skor optimal.
 
@@ -445,18 +445,20 @@ HALAMAN HASIL (RESULTS PAGE)
 
 ---
 
-## 13. Rencana Rilis (Release Plan) — Timeline 1 Hari
+## 13. Rencana Rilis (Release Plan) — Timeline 4 Hari
 
-| Fase       | Tonggak Pencapaian (Milestone)                        | Garis Waktu         |
-| ---------- | ----------------------------------------------------- | ------------------- |
-| Fase 1     | Setup Proyek + Backend API (Golang) + SQL Server      | Pagi (08:00–09:30)  |
-| Fase 2     | Layanan AI (Python) + Integrasi Gemini + Prompt Eng   | Pagi (09:30–11:00)  |
-| Fase 3     | UI Frontend (Unggah + Hasil)                          | Siang (11:00–13:00) |
-| Fase 4     | Automation Workflow (n8n) + Unduh Laporan PDF         | Siang (13:00–14:30) |
-| Fase 5     | Integrasi End-to-End + Pengujian + Perbaikan Bug      | Sore (14:30–16:00)  |
-| Peluncuran | Final review + Deploy (v1.0)                          | Sore (16:00–17:00)  |
+| Hari | Fase       | Tonggak Pencapaian (Milestone)                                          | Garis Waktu         |
+| ---- | ---------- | ----------------------------------------------------------------------- | ------------------- |
+| 1    | Fase 1     | Setup Proyek + Inisialisasi Repository + Konfigurasi Database SQL Server | Pagi (08:00–12:00)  |
+| 1    | Fase 2     | Backend API (Golang) — Endpoint upload, parsing, dan respons            | Siang (13:00–17:00) |
+| 2    | Fase 3     | Layanan AI (Python/FastAPI) + Integrasi Gemini Flash API + Prompt Eng   | Pagi (08:00–12:00)  |
+| 2    | Fase 4     | Koneksi Backend ↔ Layanan AI + Testing API End-to-End                   | Siang (13:00–17:00) |
+| 3    | Fase 5     | UI Frontend (React + Vite) — Halaman Unggah + Halaman Hasil             | Pagi (08:00–12:00)  |
+| 3    | Fase 6     | Integrasi Frontend ↔ Backend + Automation Workflow (n8n)                | Siang (13:00–17:00) |
+| 4    | Fase 7     | Fitur Unduh Laporan PDF + Penanganan Kesalahan + Responsif              | Pagi (08:00–12:00)  |
+| 4    | Peluncuran | Pengujian End-to-End + Perbaikan Bug + Final Review + Deploy (v1.0)     | Siang (13:00–17:00) |
 
-> **Catatan:** Timeline ini mengasumsikan pengerjaan intensif dalam satu hari (~9 jam kerja) dengan fokus pada fitur inti MVP. Fitur non-esensial seperti unduh laporan PDF dapat di-_defer_ jika waktu tidak mencukupi.
+> **Catatan:** Timeline ini mengasumsikan 4 hari kerja (~8 jam/hari, total ~32 jam kerja). Setiap hari memiliki fokus yang jelas untuk memastikan progres terukur dan kualitas hasil akhir.
 
 ---
 
@@ -493,42 +495,40 @@ HALAMAN HASIL (RESULTS PAGE)
 | ------- | --------------------------------------------------------------------------------------------------------------------------- |
 | CV      | Curriculum Vitae — dokumen yang merangkum kualifikasi seseorang                                                             |
 | NLP     | Natural Language Processing (Pemrosesan Bahasa Alami) — Teknik AI untuk memahami teks                                       |
-| LLM     | Large Language Model — Model AI yang dilatih dengan data teks (mis., Gemini)                                                 |
+| LLM     | Large Language Model — Model AI yang dilatih dengan data teks (mis., Gemini)                                                |
 | ATS     | Applicant Tracking System (Sistem Pelacakan Pelamar) — perangkat lunak yang digunakan oleh pemberi kerja untuk menyaring CV |
 | API     | Application Programming Interface — cara sistem untuk berkomunikasi                                                         |
 
 ---
 
-## Daftar Referensi (IEEE Style)
+## Daftar Referensi
 
-[1] E. Ries, *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses*. New York, NY, USA: Crown Business, 2011. [Online]. Available: https://theleanstartup.com
+[1] E. Ries, _The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses_. New York, NY, USA: Crown Business, 2011. [Online]. Available: https://theleanstartup.com
 
-[2] Artificial Analysis, "LLM Leaderboard & Comparison — Gemini Flash Benchmarks," *artificialanalysis.ai*, 2024. [Online]. Available: https://artificialanalysis.ai/leaderboards/quality
+[2] Artificial Analysis, "LLM Leaderboard & Comparison — Gemini Flash Benchmarks," _artificialanalysis.ai_, 2024. [Online]. Available: https://artificialanalysis.ai/leaderboards/quality
 
-[3] SurveySparrow, "CSAT Benchmarks by Industry: What's a Good CSAT Score in 2024?," *surveysparrow.com*, 2024. [Online]. Available: https://surveysparrow.com/blog/csat-benchmarks/
+[3] SurveySparrow, "CSAT Benchmarks by Industry: What's a Good CSAT Score in 2024?," _surveysparrow.com_, 2024. [Online]. Available: https://surveysparrow.com/blog/csat-benchmarks/
 
-[4] B. Beyer, C. Jones, J. Petoff, and N. R. Murphy, *Site Reliability Engineering: How Google Runs Production Systems*. Sebastopol, CA, USA: O'Reilly Media, 2016. [Online]. Available: https://sre.google/sre-book/table-of-contents/
+[4] B. Beyer, C. Jones, J. Petoff, and N. R. Murphy, _Site Reliability Engineering: How Google Runs Production Systems_. Sebastopol, CA, USA: O'Reilly Media, 2016. [Online]. Available: https://sre.google/sre-book/table-of-contents/
 
-[5] Userpilot, "Feature Adoption Rate: Benchmarks & How to Improve It," *userpilot.com*, 2024. [Online]. Available: https://userpilot.com/blog/feature-adoption-rate/
+[5] Userpilot, "Feature Adoption Rate: Benchmarks & How to Improve It," _userpilot.com_, 2024. [Online]. Available: https://userpilot.com/blog/feature-adoption-rate/
 
-[6] Google, "Gemini API Documentation — Google AI for Developers," *ai.google.dev*, 2024. [Online]. Available: https://ai.google.dev/docs
+[6] Google, "Gemini API Documentation — Google AI for Developers," _ai.google.dev_, 2024. [Online]. Available: https://ai.google.dev/docs
 
-[7] Forbes Human Resources Council, "The State of Job Market Competition and AI in Hiring," *forbes.com*, 2024. [Online]. Available: https://www.forbes.com/sites/forbeshumanresourcescouncil/
+[7] Forbes Human Resources Council, "The State of Job Market Competition and AI in Hiring," _forbes.com_, 2024. [Online]. Available: https://www.forbes.com/sites/forbeshumanresourcescouncil/
 
-[8] Scale.jobs, "How Much Does a Professional Resume Writer Cost?," *scale.jobs*, 2024. [Online]. Available: https://www.scale.jobs/blog/professional-resume-writer-cost
+[8] Scale.jobs, "How Much Does a Professional Resume Writer Cost?," _scale.jobs_, 2024. [Online]. Available: https://www.scale.jobs/blog/professional-resume-writer-cost
 
-[9] Vite Contributors, "Vite — Next Generation Frontend Tooling," *vitejs.dev*, 2024. [Online]. Available: https://vitejs.dev/guide/
+[9] Vite Contributors, "Vite — Next Generation Frontend Tooling," _vitejs.dev_, 2024. [Online]. Available: https://vitejs.dev/guide/
 
-[10] Go Team, "The Go Programming Language — Documentation," *go.dev*, 2024. [Online]. Available: https://go.dev/doc/
+[10] Go Team, "The Go Programming Language — Documentation," _go.dev_, 2024. [Online]. Available: https://go.dev/doc/
 
-[11] S. Ramírez, "FastAPI — Modern, Fast Web Framework for Building APIs with Python," *fastapi.tiangolo.com*, 2024. [Online]. Available: https://fastapi.tiangolo.com
+[11] S. Ramírez, "FastAPI — Modern, Fast Web Framework for Building APIs with Python," _fastapi.tiangolo.com_, 2024. [Online]. Available: https://fastapi.tiangolo.com
 
-[12] M. Fenniak *et al.*, "PyPDF2 — A Pure-Python PDF Library," *pypdf2.readthedocs.io*, 2024. [Online]. Available: https://pypdf2.readthedocs.io/en/latest/
+[12] M. Fenniak _et al._, "PyPDF2 — A Pure-Python PDF Library," _pypdf2.readthedocs.io_, 2024. [Online]. Available: https://pypdf2.readthedocs.io/en/latest/
 
-[13] n8n GmbH, "n8n Documentation — Workflow Automation Platform," *docs.n8n.io*, 2024. [Online]. Available: https://docs.n8n.io/
+[13] n8n GmbH, "n8n Documentation — Workflow Automation Platform," _docs.n8n.io_, 2024. [Online]. Available: https://docs.n8n.io/
 
 ---
 
 _Akhir Dokumen_
-
-
