@@ -1,462 +1,462 @@
 # Product Requirements Document (PRD)
-# AI-Powered CV Analyzer
+# AI-Powered CV Analyzer -> Penganalisis CV Berbasis AI
 
 | Field            | Detail                          |
 |------------------|---------------------------------|
-| **Product Name** | CV Analyzer                     |
+| **Product Name** | CV Analyzer (Penganalisis CV)   |
 | **Version**      | 1.0                             |
-| **Date**         | April 24, 2026                  |
-| **Status**       | Draft                           |
-| **Author**       | Product Team                    |
+| **Date**         | 24 April 2026                   |
+| **Status**       | Draf                            |
+| **Author**       | Tim Produk                      |
 
 ---
 
-## 1. Project Overview
+## 1. Gambaran Umum Proyek (Project Overview)
 
-**CV Analyzer** is a web-based application that enables job seekers to upload their resume (CV) and receive an AI-generated analysis that includes an overall quality score, identified strengths, weaknesses, and actionable improvement recommendations. The application leverages OpenAI's language models to perform Natural Language Processing (NLP) on uploaded documents, delivering structured and easy-to-understand feedback within seconds.
+**CV Analyzer** adalah aplikasi berbasis web yang memungkinkan pencari kerja untuk mengunggah resume (CV) mereka dan menerima analisis yang dihasilkan oleh AI, yang mencakup skor kualitas keseluruhan, identifikasi kekuatan, kelemahan, dan rekomendasi perbaikan yang dapat ditindaklanjuti. Aplikasi ini memanfaatkan model bahasa OpenAI untuk melakukan Pemrosesan Bahasa Alami (NLP) pada dokumen yang diunggah, memberikan umpan balik yang terstruktur dan mudah dipahami dalam hitungan detik.
 
-The product is designed with simplicity at its core — a clean, intuitive interface that any user, regardless of technical skill, can use effortlessly. It serves as both a standalone personal tool and a foundation for a scalable digital product.
-
----
-
-## 2. Background
-
-### 2.1 Market Context
-
-The job market is increasingly competitive. Job seekers often submit resumes without understanding how well their document communicates their qualifications. Professional resume review services exist but are expensive ($50–$300+) and slow (1–3 business days). Free online tools are often superficial, checking only formatting or keyword counts without understanding context.
-
-### 2.2 Opportunity
-
-Advances in Large Language Models (LLMs) — particularly OpenAI's GPT models — now make it possible to perform deep, contextual analysis of resume content at low cost and in real-time. This creates an opportunity to democratize high-quality resume feedback.
-
-### 2.3 Vision
-
-Provide every job seeker with instant, professional-grade resume feedback powered by AI — accessible, affordable, and actionable.
+Produk ini dirancang dengan mengutamakan kesederhanaan — antarmuka yang bersih dan intuitif yang dapat digunakan dengan mudah oleh siapa saja, terlepas dari keterampilan teknis yang dimiliki. Produk ini berfungsi sebagai alat bantu pribadi yang mandiri sekaligus sebagai fondasi untuk produk digital yang dapat diskalakan.
 
 ---
 
-## 3. Problems & User Pain Points
+## 2. Latar Belakang
 
-| #  | Pain Point                              | Description                                                                                                    |
+### 2.1 Konteks Pasar
+
+Pasar kerja semakin kompetitif. Pencari kerja sering kali mengirimkan resume tanpa memahami seberapa baik dokumen mereka mengkomunikasikan kualifikasi mereka. Layanan tinjauan resume profesional memang ada tetapi mahal ($50–$300+) dan lambat (1–3 hari kerja). Alat bantu online gratis sering kali hanya bersifat dangkal, hanya memeriksa format atau jumlah kata kunci tanpa memahami konteks.
+
+### 2.2 Peluang
+
+Kemajuan dalam Large Language Models (LLMs) — khususnya model GPT dari OpenAI — kini memungkinkan untuk melakukan analisis konten resume yang mendalam dan kontekstual dengan biaya rendah dan secara real-time. Hal ini menciptakan peluang untuk mendemokratisasi umpan balik resume berkualitas tinggi.
+
+### 2.3 Visi
+
+Memberikan umpan balik resume tingkat profesional instan yang didukung oleh AI kepada setiap pencari kerja — dapat diakses, terjangkau, dan dapat ditindaklanjuti.
+
+---
+
+## 3. Masalah & Poin Kelemahan Pengguna (User Pain Points)
+
+| #  | Poin Kelemahan (Pain Point)             | Deskripsi                                                                                                      |
 |----|-----------------------------------------|----------------------------------------------------------------------------------------------------------------|
-| P1 | **No objective self-assessment**        | Job seekers cannot objectively evaluate the quality of their own resume — they lack an external perspective.    |
-| P2 | **Unclear weaknesses**                  | Users don't know *what specifically* is weak in their resume (e.g., vague descriptions, missing metrics).       |
-| P3 | **Generic advice is unhelpful**         | Most free tools give generic tips ("use action verbs") without analyzing the user's actual content.             |
-| P4 | **Professional review is expensive**    | Hiring a career coach or resume writer costs $50–$300+ per session and takes days to get feedback.              |
-| P5 | **Slow feedback loop**                  | Waiting days for feedback slows down the job application process when timing matters.                           |
-| P6 | **Tech-savvy tools intimidate users**   | Many existing tools have complex UIs, require account creation, or push upsells before delivering value.       |
+| P1 | **Tidak ada penilaian diri yang objektif** | Pencari kerja tidak dapat menilai kualitas resume mereka sendiri secara objektif — mereka kurang perspektif eksternal. |
+| P2 | **Kelemahan yang tidak jelas**          | Pengguna tidak tahu *apa tepatnya* yang lemah dalam resume mereka (misalnya, deskripsi yang tidak jelas, tidak ada metrik). |
+| P3 | **Saran umum tidak membantu**           | Sebagian besar alat gratis memberikan tips umum ("gunakan kata kerja tindakan") tanpa menganalisis konten aktual pengguna. |
+| P4 | **Tinjauan profesional itu mahal**      | Menyewa pelatih karier atau penulis resume membutuhkan biaya $50–$300+ per sesi dan memakan waktu berhari-hari. |
+| P5 | **Siklus umpan balik yang lambat**      | Menunggu umpan balik selama berhari-hari akan memperlambat proses lamaran kerja, padahal waktu sangat penting. |
+| P6 | **Alat yang canggih mengintimidasi pengguna** | Banyak alat yang ada memiliki UI yang rumit, mengharuskan pembuatan akun, atau mendorong pembelian sebelum memberikan nilai. |
 
 ---
 
-## 4. Solutions
+## 4. Solusi
 
-| Pain Point | Solution                                                                                                           |
-|------------|--------------------------------------------------------------------------------------------------------------------|
-| P1         | Provide an **overall CV quality score** (0–100) so users have a clear, quantifiable benchmark.                     |
-| P2         | Generate a **structured list of weaknesses** with specific references to sections/content in the uploaded resume.  |
-| P3         | Deliver **personalized, actionable recommendations** based on the actual content of the user's CV.                 |
-| P4         | Offer **free or low-cost** AI-powered analysis that rivals professional-grade feedback.                            |
-| P5         | Return analysis results **within seconds** of uploading a document.                                                |
-| P6         | Build a **minimal, clean UI** — upload and get results in two steps. No mandatory sign-up for basic usage.         |
+| Poin Kelemahan | Solusi                                                                                                             |
+|----------------|--------------------------------------------------------------------------------------------------------------------|
+| P1             | Memberikan **skor kualitas CV keseluruhan** (0–100) sehingga pengguna memiliki tolok ukur yang jelas dan terukur.  |
+| P2             | Menghasilkan **daftar kelemahan terstruktur** dengan referensi spesifik ke bagian/konten dalam resume yang diunggah.|
+| P3             | Memberikan **rekomendasi yang dipersonalisasi dan dapat ditindaklanjuti** berdasarkan konten aktual CV pengguna.   |
+| P4             | Menawarkan analisis yang didukung AI secara **gratis atau berbiaya rendah** yang menyaingi umpan balik tingkat profesional. |
+| P5             | Mengembalikan hasil analisis **dalam hitungan detik** setelah mengunggah dokumen.                                   |
+| P6             | Membangun **UI yang minimalis dan bersih** — unggah dan dapatkan hasil dalam dua langkah. Tidak perlu mendaftar untuk penggunaan dasar. |
 
 ---
 
-## 5. High-Level Architecture
+## 5. Arsitektur Tingkat Tinggi (High-Level Architecture)
 
-![High-Level Architecture Diagram](docs/images/architecture_diagram.png)
+![Diagram Arsitektur Tingkat Tinggi](docs/images/architecture_diagram.png)
 
-### Architecture Notes
+### Catatan Arsitektur
 
-| Component         | Technology / Tool                  | Purpose                                              |
+| Komponen          | Teknologi / Alat                   | Tujuan                                               |
 |-------------------|------------------------------------|------------------------------------------------------|
-| Frontend          | HTML, CSS, JavaScript (or React)   | User interface for upload and results display         |
-| Backend API       | Node.js (Express) or Python (FastAPI) | Handles file upload, orchestration, and response   |
-| Document Parser   | pdf-parse, mammoth, or PyPDF2      | Extracts plain text from PDF/DOCX files              |
-| Prompt Engine     | Custom module                      | Constructs structured prompts for the LLM            |
-| AI Service        | OpenAI GPT API (gpt-4o-mini)      | Performs NLP analysis and generates structured output |
+| Frontend          | HTML, CSS, JavaScript (atau React) | Antarmuka pengguna untuk unggahan dan tampilan hasil |
+| Backend API       | Node.js (Express) atau Python (FastAPI)| Menangani unggahan file, orkestrasi, dan respons   |
+| Parser Dokumen    | pdf-parse, mammoth, atau PyPDF2    | Mengekstrak teks biasa dari file PDF/DOCX            |
+| Mesin Prompt      | Modul kustom                       | Menyusun prompt terstruktur untuk LLM                |
+| Layanan AI        | API OpenAI GPT (gpt-4o-mini)       | Melakukan analisis NLP dan menghasilkan output terstruktur |
 
 ---
 
-## 6. User Flow
+## 6. Alur Pengguna (User Flow)
 
-![User Flow Diagram](docs/images/user_flow_diagram.png)
+![Diagram Alur Pengguna](docs/images/user_flow_diagram.png)
 
 ---
 
-## 7. Scope
+## 7. Cakupan (Scope)
 
-### 7.1 In Scope (v1.0)
+### 7.1 Dalam Cakupan (In Scope - v1.0)
 
-| #   | Feature                        | Description                                                       |
+| #   | Fitur                          | Deskripsi                                                         |
 |-----|--------------------------------|-------------------------------------------------------------------|
-| S1  | File Upload                    | Upload a single CV file in PDF or DOCX format (max 5 MB)         |
-| S2  | Document Parsing               | Extract text content from the uploaded file                       |
-| S3  | AI Analysis                    | Send extracted text to OpenAI API and receive structured analysis |
-| S4  | Overall Score                  | Display an overall quality score from 0 to 100                   |
-| S5  | Strengths                      | Display a list of identified strengths in the CV                  |
-| S6  | Weaknesses                     | Display a list of identified weaknesses in the CV                 |
-| S7  | Recommendations                | Display actionable improvement suggestions                        |
-| S8  | Results Display                | Show all analysis results on a single, clean results page         |
-| S9  | Upload Another                 | Allow users to analyze a new CV without refreshing the page       |
-| S10 | Download Report                | Export the analysis result as a downloadable PDF report           |
-| S11 | Error Handling                 | Graceful handling of invalid files, API errors, and edge cases    |
-| S12 | Responsive Design              | Works on desktop and mobile browsers                              |
+| S1  | Unggah File                    | Unggah satu file CV dalam format PDF atau DOCX (maks. 5 MB)       |
+| S2  | Penguraian Dokumen (Parsing)   | Mengekstrak konten teks dari file yang diunggah                   |
+| S3  | Analisis AI                    | Mengirim teks yang diekstrak ke API OpenAI dan menerima analisis terstruktur |
+| S4  | Skor Keseluruhan               | Menampilkan skor kualitas keseluruhan dari 0 hingga 100           |
+| S5  | Kekuatan                       | Menampilkan daftar kekuatan yang teridentifikasi di CV            |
+| S6  | Kelemahan                      | Menampilkan daftar kelemahan yang teridentifikasi di CV           |
+| S7  | Rekomendasi                    | Menampilkan saran perbaikan yang dapat ditindaklanjuti            |
+| S8  | Tampilan Hasil                 | Menampilkan semua hasil analisis pada satu halaman hasil yang bersih |
+| S9  | Unggah Lainnya                 | Mengizinkan pengguna untuk menganalisis CV baru tanpa menyegarkan halaman |
+| S10 | Unduh Laporan                  | Mengekspor hasil analisis sebagai laporan PDF yang dapat diunduh  |
+| S11 | Penanganan Kesalahan           | Penanganan yang baik terhadap file tidak valid, kesalahan API, dan kasus tepi (edge cases) |
+| S12 | Desain Responsif               | Berfungsi pada browser desktop dan seluler                        |
 
-### 7.2 Out of Scope (v1.0)
+### 7.2 Di Luar Cakupan (Out of Scope - v1.0)
 
-| Feature                                   | Reason                                                  |
+| Fitur                                     | Alasan                                                  |
 |-------------------------------------------|---------------------------------------------------------|
-| User authentication / accounts            | Keep v1 frictionless — no sign-up required              |
-| CV history / storage                      | Requires user accounts and database — deferred to v2    |
-| Job description matching                  | Adds complexity — planned for future iteration          |
-| Multi-language CV support                 | English-only in v1 to simplify prompt engineering       |
-| CV template builder                       | Different product domain — out of scope                 |
-| ATS simulation                            | Complex feature — deferred to v2                        |
-| Payment / subscription                    | Not needed until product-market fit is validated        |
+| Autentikasi pengguna / akun               | Menjaga v1 agar tidak memiliki hambatan — tidak perlu mendaftar |
+| Riwayat / penyimpanan CV                  | Membutuhkan akun pengguna dan database — ditunda ke v2  |
+| Pencocokan deskripsi pekerjaan            | Menambah kerumitan — direncanakan untuk iterasi berikutnya|
+| Dukungan CV multi-bahasa                  | Hanya bahasa Inggris pada v1 untuk menyederhanakan penyusunan prompt |
+| Pembuat template CV                       | Domain produk berbeda — di luar cakupan                 |
+| Simulasi ATS                              | Fitur kompleks — ditunda ke v2                          |
+| Pembayaran / langganan                    | Belum dibutuhkan sampai kecocokan produk-pasar tervalidasi|
 
 ---
 
-## 8. User Stories
+## 8. Cerita Pengguna (User Stories)
 
-### Epic 1: CV Upload
+### Epik 1: Unggah CV
 
-#### US-1.1: Upload CV File
+#### US-1.1: Unggah File CV
 
-> **As a** job seeker,
-> **I want to** upload my CV file from my device,
-> **So that** the system can analyze my resume content.
+> **Sebagai** pencari kerja,
+> **Saya ingin** mengunggah file CV saya dari perangkat saya,
+> **Sehingga** sistem dapat menganalisis konten resume saya.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan (Acceptance Criteria):**
 
-| #    | Criteria                                                                                     | Type       |
+| #    | Kriteria                                                                                     | Jenis      |
 |------|----------------------------------------------------------------------------------------------|------------|
-| AC-1 | User can select a file via a file picker dialog or drag-and-drop                             | Functional |
-| AC-2 | System accepts PDF and DOCX file formats only                                                | Functional |
-| AC-3 | System rejects files exceeding 5 MB with a clear error message                               | Functional |
-| AC-4 | System rejects unsupported file formats with message: "Please upload a PDF or DOCX file"     | Functional |
-| AC-5 | Upload button is clearly visible and labeled on the page                                     | UX         |
-| AC-6 | Drag-and-drop zone is visually indicated with a dashed border and icon                       | UX         |
+| AC-1 | Pengguna dapat memilih file melalui dialog pemilih file atau seret-dan-lepas (drag-and-drop) | Fungsional |
+| AC-2 | Sistem hanya menerima format file PDF dan DOCX                                               | Fungsional |
+| AC-3 | Sistem menolak file yang melebihi 5 MB dengan pesan kesalahan yang jelas                     | Fungsional |
+| AC-4 | Sistem menolak format file yang tidak didukung dengan pesan: "Silakan unggah file PDF atau DOCX" | Fungsional |
+| AC-5 | Tombol unggah terlihat jelas dan diberi label pada halaman                                   | UX         |
+| AC-6 | Zona seret-dan-lepas diindikasikan secara visual dengan batas putus-putus dan ikon         | UX         |
 
 ---
 
-#### US-1.2: File Validation Feedback
+#### US-1.2: Umpan Balik Validasi File
 
-> **As a** user,
-> **I want to** see immediate feedback if my file is invalid,
-> **So that** I can correct the issue and upload the right file.
+> **Sebagai** pengguna,
+> **Saya ingin** melihat umpan balik langsung jika file saya tidak valid,
+> **Sehingga** saya dapat memperbaiki masalah dan mengunggah file yang benar.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                         | Type       |
+| #    | Kriteria                                                                                         | Jenis      |
 |------|--------------------------------------------------------------------------------------------------|------------|
-| AC-1 | Error message appears within 1 second of file selection if the file is invalid                   | Functional |
-| AC-2 | Error message is displayed inline (not as a browser alert/popup)                                 | UX         |
-| AC-3 | Error message clearly states the reason for rejection (format, size, or empty file)              | UX         |
-| AC-4 | User can retry upload without navigating away from the page                                      | Functional |
+| AC-1 | Pesan kesalahan muncul dalam 1 detik setelah pemilihan file jika file tidak valid                 | Fungsional |
+| AC-2 | Pesan kesalahan ditampilkan sebaris (bukan sebagai pop-up/peringatan browser)                    | UX         |
+| AC-3 | Pesan kesalahan dengan jelas menyatakan alasan penolakan (format, ukuran, atau file kosong)      | UX         |
+| AC-4 | Pengguna dapat mencoba mengunggah kembali tanpa berpindah dari halaman                             | Fungsional |
 
 ---
 
-### Epic 2: CV Analysis
+### Epik 2: Analisis CV
 
-#### US-2.1: Analyze CV Content
+#### US-2.1: Analisis Konten CV
 
-> **As a** job seeker,
-> **I want** the system to analyze my CV content using AI,
-> **So that** I receive objective feedback on my resume quality.
+> **Sebagai** pencari kerja,
+> **Saya ingin** sistem menganalisis konten CV saya menggunakan AI,
+> **Sehingga** saya menerima umpan balik yang objektif tentang kualitas resume saya.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type         |
+| #    | Kriteria                                                                                  | Jenis        |
 |------|-------------------------------------------------------------------------------------------|--------------|
-| AC-1 | System extracts text from the uploaded PDF or DOCX file                                   | Functional   |
-| AC-2 | Extracted text is sent to OpenAI API for analysis                                         | Functional   |
-| AC-3 | Analysis is completed and results are displayed within 30 seconds                         | Performance  |
-| AC-4 | A loading/progress indicator is shown while analysis is in progress                       | UX           |
-| AC-5 | User cannot upload another file while analysis is in progress                             | Functional   |
+| AC-1 | Sistem mengekstrak teks dari file PDF atau DOCX yang diunggah                             | Fungsional   |
+| AC-2 | Teks yang diekstrak dikirim ke API OpenAI untuk dianalisis                                | Fungsional   |
+| AC-3 | Analisis selesai dan hasil ditampilkan dalam waktu 30 detik                               | Kinerja      |
+| AC-4 | Indikator pemuatan/kemajuan (loading/progress) ditampilkan saat analisis sedang berlangsung| UX           |
+| AC-5 | Pengguna tidak dapat mengunggah file lain saat analisis sedang berlangsung                | Fungsional   |
 
 ---
 
-#### US-2.2: View Overall Score
+#### US-2.2: Lihat Skor Keseluruhan
 
-> **As a** job seeker,
-> **I want to** see an overall quality score for my CV,
-> **So that** I have a quick, quantifiable sense of my resume quality.
+> **Sebagai** pencari kerja,
+> **Saya ingin** melihat skor kualitas keseluruhan untuk CV saya,
+> **Sehingga** saya memiliki gambaran yang cepat dan terukur tentang kualitas resume saya.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | Score is displayed as a number from 0 to 100                                              | Functional |
-| AC-2 | Score is visually prominent (large font, centered) on the results page                    | UX         |
-| AC-3 | Score includes a color indicator: red (0–39), yellow (40–69), green (70–100)              | UX         |
-| AC-4 | A brief label accompanies the score (e.g., "Needs Work", "Good", "Excellent")             | UX         |
+| AC-1 | Skor ditampilkan sebagai angka dari 0 hingga 100                                          | Fungsional |
+| AC-2 | Skor secara visual menonjol (font besar, di tengah) pada halaman hasil                    | UX         |
+| AC-3 | Skor menyertakan indikator warna: merah (0–39), kuning (40–69), hijau (70–100)            | UX         |
+| AC-4 | Label singkat menyertai skor (misalnya, "Perlu Perbaikan", "Bagus", "Luar Biasa")         | UX         |
 
 ---
 
-#### US-2.3: View Strengths
+#### US-2.3: Lihat Kekuatan
 
-> **As a** job seeker,
-> **I want to** see a list of strengths identified in my CV,
-> **So that** I know what I am doing well and should keep.
+> **Sebagai** pencari kerja,
+> **Saya ingin** melihat daftar kekuatan yang teridentifikasi dalam CV saya,
+> **Sehingga** saya tahu apa yang telah saya lakukan dengan baik dan harus dipertahankan.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | Strengths are displayed as a bulleted list with 3–7 items                                 | Functional |
-| AC-2 | Each strength item is a specific observation (not generic advice)                          | Quality    |
-| AC-3 | Strengths section is clearly labeled with a green accent or icon                          | UX         |
+| AC-1 | Kekuatan ditampilkan sebagai daftar berpoin (bulleted) dengan 3–7 item                    | Fungsional |
+| AC-2 | Setiap item kekuatan adalah observasi spesifik (bukan saran umum)                         | Kualitas   |
+| AC-3 | Bagian kekuatan diberi label dengan jelas dengan aksen hijau atau ikon                    | UX         |
 
 ---
 
-#### US-2.4: View Weaknesses
+#### US-2.4: Lihat Kelemahan
 
-> **As a** job seeker,
-> **I want to** see a list of weaknesses found in my CV,
-> **So that** I know exactly what to improve.
+> **Sebagai** pencari kerja,
+> **Saya ingin** melihat daftar kelemahan yang ditemukan dalam CV saya,
+> **Sehingga** saya tahu persis apa yang harus diperbaiki.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | Weaknesses are displayed as a bulleted list with 3–7 items                                | Functional |
-| AC-2 | Each weakness item references a specific issue in the CV content                           | Quality    |
-| AC-3 | Weaknesses section is clearly labeled with a red/orange accent or icon                    | UX         |
+| AC-1 | Kelemahan ditampilkan sebagai daftar berpoin dengan 3–7 item                              | Fungsional |
+| AC-2 | Setiap item kelemahan merujuk pada masalah spesifik dalam konten CV                       | Kualitas   |
+| AC-3 | Bagian kelemahan diberi label dengan jelas dengan aksen merah/oranye atau ikon            | UX         |
 
 ---
 
-#### US-2.5: View Recommendations
+#### US-2.5: Lihat Rekomendasi
 
-> **As a** job seeker,
-> **I want to** receive actionable recommendations to improve my CV,
-> **So that** I can make concrete changes to strengthen my resume.
+> **Sebagai** pencari kerja,
+> **Saya ingin** menerima rekomendasi yang dapat ditindaklanjuti untuk memperbaiki CV saya,
+> **Sehingga** saya dapat membuat perubahan nyata untuk memperkuat resume saya.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                                            | Type       |
+| #    | Kriteria                                                                                                            | Jenis      |
 |------|---------------------------------------------------------------------------------------------------------------------|------------|
-| AC-1 | Recommendations are displayed as a numbered list with 3–7 items                                                     | Functional |
-| AC-2 | Each recommendation is specific and actionable (e.g., "Add metrics to your Sales Manager bullet points")            | Quality    |
-| AC-3 | Recommendations are prioritized from most impactful to least                                                        | Quality    |
-| AC-4 | Recommendations section is clearly labeled with a blue accent or icon                                               | UX         |
+| AC-1 | Rekomendasi ditampilkan sebagai daftar bernomor dengan 3–7 item                                                     | Fungsional |
+| AC-2 | Setiap rekomendasi spesifik dan dapat ditindaklanjuti (mis., "Tambahkan metrik ke poin-poin Manajer Penjualan Anda")| Kualitas   |
+| AC-3 | Rekomendasi diurutkan berdasarkan prioritas dari yang paling berdampak hingga yang paling tidak berdampak           | Kualitas   |
+| AC-4 | Bagian rekomendasi diberi label dengan jelas dengan aksen biru atau ikon                                            | UX         |
 
 ---
 
-### Epic 3: Results Management
+### Epik 3: Manajemen Hasil
 
-#### US-3.1: Download Analysis Report
+#### US-3.1: Unduh Laporan Analisis
 
-> **As a** job seeker,
-> **I want to** download my analysis results as a PDF,
-> **So that** I can save and reference them offline while improving my CV.
+> **Sebagai** pencari kerja,
+> **Saya ingin** mengunduh hasil analisis saya sebagai PDF,
+> **Sehingga** saya dapat menyimpannya dan menjadikannya referensi secara luring (offline) saat memperbaiki CV saya.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | A "Download Report" button is visible on the results page                                 | Functional |
-| AC-2 | Clicking the button generates and downloads a PDF file                                    | Functional |
-| AC-3 | The PDF contains: score, strengths, weaknesses, and recommendations                       | Functional |
-| AC-4 | The PDF is cleanly formatted and readable                                                 | Quality    |
-| AC-5 | The file is named with a recognizable pattern (e.g., CV_Analysis_Report_2026-04-24.pdf)   | UX         |
+| AC-1 | Tombol "Unduh Laporan" terlihat di halaman hasil                                          | Fungsional |
+| AC-2 | Mengklik tombol akan menghasilkan dan mengunduh file PDF                                  | Fungsional |
+| AC-3 | PDF berisi: skor, kekuatan, kelemahan, dan rekomendasi                                    | Fungsional |
+| AC-4 | PDF diformat dengan rapi dan dapat dibaca                                                 | Kualitas   |
+| AC-5 | File diberi nama dengan pola yang mudah dikenali (misalnya, Laporan_Analisis_CV_2026-04-24.pdf) | UX         |
 
 ---
 
-#### US-3.2: Analyze Another CV
+#### US-3.2: Analisis CV Lainnya
 
-> **As a** user,
-> **I want to** upload and analyze another CV after viewing results,
-> **So that** I can compare different versions of my resume or help others.
+> **Sebagai** pengguna,
+> **Saya ingin** mengunggah dan menganalisis CV lain setelah melihat hasil,
+> **Sehingga** saya dapat membandingkan versi resume saya yang berbeda atau membantu orang lain.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | An "Upload Another CV" button is visible on the results page                              | Functional |
-| AC-2 | Clicking the button navigates back to the upload screen                                   | Functional |
-| AC-3 | Previous results are cleared from the display                                             | Functional |
-| AC-4 | No page reload is required (smooth transition)                                            | UX         |
+| AC-1 | Tombol "Unggah CV Lain" terlihat di halaman hasil                                         | Fungsional |
+| AC-2 | Mengklik tombol akan mengarahkan kembali ke layar unggah                                  | Fungsional |
+| AC-3 | Hasil sebelumnya dibersihkan dari tampilan                                                | Fungsional |
+| AC-4 | Tidak perlu memuat ulang halaman (transisi mulus)                                         | UX         |
 
 ---
 
-### Epic 4: Error Handling
+### Epik 4: Penanganan Kesalahan (Error Handling)
 
-#### US-4.1: Handle Analysis Failure
+#### US-4.1: Menangani Kegagalan Analisis
 
-> **As a** user,
-> **I want to** see a clear error message if the analysis fails,
-> **So that** I understand what went wrong and can try again.
+> **Sebagai** pengguna,
+> **Saya ingin** melihat pesan kesalahan yang jelas jika analisis gagal,
+> **Sehingga** saya mengerti apa yang salah dan bisa mencoba lagi.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | If the OpenAI API returns an error, the user sees a friendly message (not a raw error)    | Functional |
-| AC-2 | Error message includes a "Try Again" button                                               | UX         |
-| AC-3 | System logs the actual error for debugging (server-side)                                  | Technical  |
-| AC-4 | If the file content is unreadable/empty, the user is informed to upload a different file   | Functional |
+| AC-1 | Jika API OpenAI mengembalikan kesalahan, pengguna melihat pesan yang ramah (bukan kesalahan mentah)| Fungsional |
+| AC-2 | Pesan kesalahan menyertakan tombol "Coba Lagi"                                            | UX         |
+| AC-3 | Sistem mencatat kesalahan sebenarnya untuk debugging (sisi server)                        | Teknis     |
+| AC-4 | Jika konten file tidak dapat dibaca/kosong, pengguna diberi tahu untuk mengunggah file lain | Fungsional |
 
 ---
 
-#### US-4.2: Handle Network Issues
+#### US-4.2: Menangani Masalah Jaringan
 
-> **As a** user,
-> **I want** the application to handle slow or failed network connections gracefully,
-> **So that** I do not lose my progress or see confusing errors.
+> **Sebagai** pengguna,
+> **Saya ingin** aplikasi menangani koneksi jaringan yang lambat atau gagal dengan baik,
+> **Sehingga** saya tidak kehilangan progres saya atau melihat kesalahan yang membingungkan.
 
-**Acceptance Criteria:**
+**Kriteria Penerimaan:**
 
-| #    | Criteria                                                                                  | Type       |
+| #    | Kriteria                                                                                  | Jenis      |
 |------|-------------------------------------------------------------------------------------------|------------|
-| AC-1 | If the upload request times out after 60 seconds, show a timeout error message            | Functional |
-| AC-2 | If the analysis request times out after 60 seconds, show a timeout error message          | Functional |
-| AC-3 | User can retry without re-selecting the file                                              | UX         |
+| AC-1 | Jika permintaan unggah kehabisan waktu (timeout) setelah 60 detik, tampilkan pesan kesalahan batas waktu | Fungsional |
+| AC-2 | Jika permintaan analisis kehabisan waktu (timeout) setelah 60 detik, tampilkan pesan kesalahan batas waktu| Fungsional |
+| AC-3 | Pengguna dapat mencoba lagi tanpa memilih ulang file                                      | UX         |
 
 ---
 
-## 9. Non-Functional Requirements
+## 9. Persyaratan Non-Fungsional (Non-Functional Requirements)
 
-| #    | Requirement                | Target                                                         |
+| #    | Persyaratan                | Target                                                         |
 |------|----------------------------|----------------------------------------------------------------|
-| NFR-1| Response Time              | Analysis results returned within 30 seconds                    |
-| NFR-2| File Size Limit            | Maximum upload size: 5 MB                                      |
-| NFR-3| Browser Support            | Chrome, Firefox, Safari, Edge (latest 2 versions)              |
-| NFR-4| Mobile Responsive          | Fully usable on screens >= 320px width                         |
-| NFR-5| Accessibility              | WCAG 2.1 Level AA compliance for core flows                    |
-| NFR-6| Data Privacy               | Uploaded files are not stored after analysis; processed in-memory only |
-| NFR-7| API Key Security           | OpenAI API key is stored server-side only; never exposed to client |
-| NFR-8| Availability               | 99% uptime target for MVP                                      |
+| NFR-1| Waktu Respons              | Hasil analisis dikembalikan dalam waktu 30 detik               |
+| NFR-2| Batas Ukuran File          | Ukuran unggahan maksimal: 5 MB                                 |
+| NFR-3| Dukungan Browser           | Chrome, Firefox, Safari, Edge (2 versi terbaru)                |
+| NFR-4| Responsif Seluler          | Dapat digunakan sepenuhnya di layar dengan lebar >= 320px      |
+| NFR-5| Aksesibilitas              | Kepatuhan WCAG 2.1 Level AA untuk alur inti                    |
+| NFR-6| Privasi Data               | File yang diunggah tidak disimpan setelah analisis; diproses hanya di memori |
+| NFR-7| Keamanan Kunci API         | Kunci API OpenAI hanya disimpan di sisi server; tidak pernah diekspos ke klien|
+| NFR-8| Ketersediaan               | Target uptime 99% untuk MVP                                    |
 
 ---
 
-## 10. UI/UX Design Principles
+## 10. Prinsip Desain UI/UX
 
-| Principle                    | Guideline                                                                           |
+| Prinsip                      | Panduan                                                                             |
 |------------------------------|-------------------------------------------------------------------------------------|
-| Simplicity First             | Maximum 2 steps to get results: upload then view results                            |
-| No Sign-Up Wall              | Users can analyze a CV without creating an account                                  |
-| Clear Visual Hierarchy       | Score is the hero element; strengths, weaknesses, and recommendations follow below  |
-| Friendly Language            | Avoid jargon; use plain English that non-tech users understand                      |
-| Mobile-Friendly              | Touch-friendly buttons, readable fonts, no horizontal scrolling                     |
-| Minimal Cognitive Load       | One primary action per screen; no cluttered sidebars or nav menus                   |
+| Utamakan Kesederhanaan       | Maksimal 2 langkah untuk mendapatkan hasil: unggah lalu lihat hasil                 |
+| Tanpa Tembok Pendaftaran     | Pengguna dapat menganalisis CV tanpa membuat akun                                   |
+| Hierarki Visual yang Jelas   | Skor adalah elemen utama; kekuatan, kelemahan, dan rekomendasi mengikutinya di bawah|
+| Bahasa yang Ramah            | Hindari jargon; gunakan bahasa sehari-hari yang dipahami pengguna non-teknis        |
+| Ramah Seluler (Mobile-Friendly)| Tombol yang ramah sentuhan, font yang dapat dibaca, tidak ada pengguliran horizontal|
+| Beban Kognitif Minimal       | Satu tindakan utama per layar; tidak ada bilah sisi atau menu navigasi yang berantakan|
 
-### Wireframe Concept (3 Screens)
+### Konsep Wireframe (3 Layar)
 
 ```
-LANDING PAGE
+HALAMAN UTAMA (LANDING PAGE)
 +------------------------------+
 |                              |
-|    CV Analyzer               |
-|    Get instant AI feedback   |
-|    on your resume            |
+|    Penganalisis CV           |
+|    Dapatkan umpan balik AI   |
+|    instan untuk resume Anda  |
 |                              |
 |   +----------------------+   |
-|   |  [ Analyze My CV ] --+   |
+|   |  [ Analisis CV Saya] --+ |
 |   +----------------------+   |
 +------------------------------+
 
-UPLOAD PAGE
+HALAMAN UNGGAH (UPLOAD PAGE)
 +------------------------------+
 |                              |
 |   + - - - - - - - - - - +   |
-|   | Drag and drop your   |   |
-|   | CV here, or click    |   |
-|   | to browse            |   |
+|   | Seret dan lepas CV   |   |
+|   | Anda di sini, atau   |   |
+|   | klik untuk menelusuri|   |
 |   |                      |   |
-|   | PDF or DOCX, max 5MB |   |
+|   | PDF atau DOCX, maks 5MB| |
 |   + - - - - - - - - - - +   |
 |                              |
-|   [ Back ]    [ Upload ]     |
+|   [ Kembali ]  [ Unggah ]    |
 +------------------------------+
 
-RESULTS PAGE
+HALAMAN HASIL (RESULTS PAGE)
 +------------------------------+
 |                              |
-|          Score: 72           |
-|          "Good"              |
+|          Skor: 72            |
+|          "Bagus"             |
 |                              |
-|  Strengths                   |
-|  * Clear work experience     |
-|  * Strong action verbs       |
+|  Kekuatan                    |
+|  * Pengalaman kerja yang jelas|
+|  * Kata kerja tindakan kuat  |
 |                              |
-|  Weaknesses                  |
-|  * Missing quantifiable      |
-|    achievements              |
-|  * No summary section        |
+|  Kelemahan                   |
+|  * Kurangnya pencapaian yang |
+|    dapat diukur              |
+|  * Tidak ada bagian ringkasan|
 |                              |
-|  Recommendations             |
-|  1. Add metrics to bullets   |
-|  2. Include a professional   |
-|     summary at the top       |
+|  Rekomendasi                 |
+|  1. Tambahkan metrik ke poin |
+|  2. Sertakan ringkasan       |
+|     profesional di bagian atas|
 |                              |
-|  [Download]  [Upload Another]|
+|  [Unduh]    [Unggah Lainnya] |
 +------------------------------+
 ```
 
 ---
 
-## 11. Success Metrics
+## 11. Metrik Keberhasilan (Success Metrics)
 
-| Metric                        | Target (v1.0 First 3 Months)      |
+| Metrik                        | Target (v1.0 3 Bulan Pertama)     |
 |-------------------------------|-----------------------------------|
-| CVs analyzed per month        | 500+                              |
-| Average analysis time         | Less than 15 seconds              |
-| User satisfaction (feedback)  | 4.0+ / 5.0                        |
-| Error rate                    | Less than 5% of upload attempts   |
-| Report download rate          | Greater than 30% of analyses      |
+| CV yang dianalisis per bulan  | 500+                              |
+| Waktu analisis rata-rata      | Kurang dari 15 detik              |
+| Kepuasan pengguna (umpan balik)| 4.0+ / 5.0                       |
+| Tingkat kesalahan             | Kurang dari 5% dari upaya unggah  |
+| Tingkat unduhan laporan       | Lebih dari 30% dari hasil analisis|
 
 ---
 
-## 12. Release Plan
+## 12. Rencana Rilis (Release Plan)
 
-| Phase        | Milestone                        | Timeline     |
+| Fase         | Tonggak Pencapaian (Milestone)   | Garis Waktu  |
 |--------------|----------------------------------|--------------|
-| Phase 1      | Backend API + Document Parsing   | Week 1-2     |
-| Phase 2      | OpenAI Integration + Prompt Eng  | Week 2-3     |
-| Phase 3      | Frontend UI (Upload + Results)   | Week 3-4     |
-| Phase 4      | PDF Report Download              | Week 4       |
-| Phase 5      | Testing, Bug Fixes, Polish       | Week 5       |
-| Launch       | Public release (v1.0)            | Week 6       |
+| Fase 1       | Backend API + Penguraian Dokumen | Minggu 1-2   |
+| Fase 2       | Integrasi OpenAI + Prompt Eng    | Minggu 2-3   |
+| Fase 3       | UI Frontend (Unggah + Hasil)     | Minggu 3-4   |
+| Fase 4       | Unduh Laporan PDF                | Minggu 4     |
+| Fase 5       | Pengujian, Perbaikan Bug, Poles  | Minggu 5     |
+| Peluncuran   | Rilis publik (v1.0)              | Minggu 6     |
 
 ---
 
-## Appendix A: API Response Structure (Expected)
+## Lampiran A: Struktur Respons API (Harapan)
 
 ```json
 {
   "score": 72,
-  "label": "Good",
+  "label": "Bagus",
   "strengths": [
-    "Clear chronological work history with relevant job titles",
-    "Effective use of action verbs in experience descriptions",
-    "Education section is well-structured with relevant details"
+    "Riwayat kerja kronologis yang jelas dengan jabatan pekerjaan yang relevan",
+    "Penggunaan kata kerja tindakan yang efektif dalam deskripsi pengalaman",
+    "Bagian pendidikan terstruktur dengan baik dengan detail yang relevan"
   ],
   "weaknesses": [
-    "Bullet points lack quantifiable achievements and metrics",
-    "No professional summary or objective statement at the top",
-    "Skills section is missing or not prominently placed"
+    "Poin-poin kurang memiliki pencapaian dan metrik yang dapat diukur",
+    "Tidak ada ringkasan profesional atau pernyataan tujuan di bagian atas",
+    "Bagian keterampilan tidak ada atau tidak ditempatkan secara menonjol"
   ],
   "recommendations": [
-    "Add specific numbers and percentages to your achievement descriptions (e.g., Increased sales by 25%)",
-    "Include a 2-3 sentence professional summary at the top of your CV highlighting your key qualifications",
-    "Create a dedicated skills section listing both technical and soft skills relevant to your target role",
-    "Ensure consistent formatting across all sections (font size, bullet style, date alignment)"
+    "Tambahkan angka dan persentase spesifik ke deskripsi pencapaian Anda (misalnya, Meningkatkan penjualan sebesar 25%)",
+    "Sertakan 2-3 kalimat ringkasan profesional di bagian atas CV Anda yang menyoroti kualifikasi utama Anda",
+    "Buat bagian keterampilan khusus yang mencantumkan keterampilan teknis dan soft skill yang relevan dengan peran target Anda",
+    "Pastikan format yang konsisten di semua bagian (ukuran font, gaya poin, perataan tanggal)"
   ]
 }
 ```
 
 ---
 
-## Appendix B: Glossary
+## Lampiran B: Glosarium
 
-| Term   | Definition                                                              |
-|--------|-------------------------------------------------------------------------|
-| CV     | Curriculum Vitae — a document summarizing a person's qualifications     |
-| NLP    | Natural Language Processing — AI techniques for understanding text      |
-| LLM    | Large Language Model — AI model trained on text data (e.g., GPT)        |
-| ATS    | Applicant Tracking System — software used by employers to filter CVs    |
-| API    | Application Programming Interface — a way for systems to communicate    |
+| Istilah | Definisi                                                                |
+|---------|-------------------------------------------------------------------------|
+| CV      | Curriculum Vitae — dokumen yang merangkum kualifikasi seseorang         |
+| NLP     | Natural Language Processing (Pemrosesan Bahasa Alami) — Teknik AI untuk memahami teks |
+| LLM     | Large Language Model — Model AI yang dilatih dengan data teks (mis., GPT)|
+| ATS     | Applicant Tracking System (Sistem Pelacakan Pelamar) — perangkat lunak yang digunakan oleh pemberi kerja untuk menyaring CV |
+| API     | Application Programming Interface — cara sistem untuk berkomunikasi     |
 
 ---
 
-*End of Document*
+*Akhir Dokumen*
