@@ -46,6 +46,7 @@ const ResultsView = ({ result, onUploadAnother }: ResultsViewProps) => {
         </div>
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:w-auto">
           <button
+            id="btn-download"
             onClick={handleDownload}
             disabled={downloading}
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-background transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
@@ -58,6 +59,7 @@ const ResultsView = ({ result, onUploadAnother }: ResultsViewProps) => {
             {downloading ? "Membuat PDF..." : "Unduh Laporan PDF"}
           </button>
           <button
+            id="btn-upload-another"
             onClick={onUploadAnother}
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/[0.08] bg-surface px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-surface-hover"
           >

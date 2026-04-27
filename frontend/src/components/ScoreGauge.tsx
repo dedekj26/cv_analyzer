@@ -9,6 +9,7 @@ interface ScoreGaugeProps {
 const ScoreGauge = ({ score, label }: ScoreGaugeProps) => {
   const radius = 88;
   const circumference = 2 * Math.PI * radius;
+  const circumferenceStr = `${circumference}`;
   const target = Math.max(0, Math.min(100, score));
 
   const motionScore = useMotionValue(0);
@@ -32,7 +33,7 @@ const ScoreGauge = ({ score, label }: ScoreGaugeProps) => {
         : "hsl(var(--destructive))";
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div id="score-display" className="relative flex flex-col items-center">
       <svg width="220" height="220" viewBox="0 0 220 220" className="-rotate-90">
         <circle
           cx="110"
@@ -50,8 +51,10 @@ const ScoreGauge = ({ score, label }: ScoreGaugeProps) => {
           stroke={color}
           strokeWidth="10"
           strokeLinecap="round"
-          strokeDasharray={circumference}
-          style={{ strokeDashoffset: offset, filter: `drop-shadow(0 0 12px ${color})` }}
+          strokeDasharray={`${circumference}`}
+          initial={{ strokeDashoffset: circumference }}
+          strokeDashoffset={offset}
+          style={{ filter: `drop-shadow(0 0 12px ${color})` }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
